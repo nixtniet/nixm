@@ -8,8 +8,10 @@
 import time
 
 
-from ..objects import Object
-from ..persist import elapsed, find, fntime, write
+from nixt.disk   import ident, write
+from nixt.find   import find, fntime, store
+from nixt.object import Object
+from nixt.utils  import elapsed
 
 
 "todo"
@@ -53,5 +55,5 @@ def tdo(event):
         return
     obj = Todo()
     obj.txt = event.rest
-    write(obj)
+    write(obj, store(ident(obj)))
     event.done()

@@ -9,9 +9,11 @@ import datetime
 import time
 
 
-from ..objects import Object, construct, keys
-from ..persist import elapsed
-from ..runtime import Event, Fleet, Repeater
+from nixt.object import Object, construct, keys
+from nixt.event  import Event
+from nixt.fleet  import  Fleet
+from nixt.thread import  Repeater
+from nixt.utils  import elapsed
 
 
 "defines"

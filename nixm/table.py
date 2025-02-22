@@ -11,8 +11,8 @@ import time
 import types
 
 
-from .thread import later, launch
-from .utils  import spl
+from nixt.thread import later, launch
+from nixt.utils  import spl
 
 
 STARTTIME = time.time()
@@ -95,9 +95,9 @@ class Table:
 
 def gettable():
     try:
-        from .lookup import NAMES as names
+        from nixm.lookup import NAMES as names
     except Exception as ex:
-        later(ex)
+        #later(ex)
         names = {}
     return names
 

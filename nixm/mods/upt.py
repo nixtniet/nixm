@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0116,E0402
 
 
 "uptime"
@@ -8,8 +7,8 @@
 import time
 
 
-from ..persist import elapsed
-from ..runtime import STARTTIME
+from nixt.utils import elapsed
+from nixm.table import STARTTIME
 
 
 def upt(event):

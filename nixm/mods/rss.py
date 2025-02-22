@@ -20,11 +20,12 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from ..clients import Fleet
-from ..command import spl
-from ..objects import Object, fmt, update
-from ..persist import elapsed, find, fntime, ident, last, store, write
-from ..runtime import Repeater, launch
+from nixt.disk    import ident,write
+from nixt.find    import find, fntime, last, store
+from nixt.object  import Object, fmt, update
+from nixt.thread  import Repeater, launch
+from nixt.utils   import elapsed, spl
+from nixm.client  import Fleet
 
 
 "defines"
@@ -122,7 +123,7 @@ class Fetcher(Object):
                 if uurl in seen:
                     continue
                 if self.dosave:
-                    write(fed)
+                    write(fed, store(ident(fed)))
                 result.append(fed)
             setattr(self.seen, feed.rss, urls)
             if not self.seenfn:
@@ -351,7 +352,7 @@ def rss(event):
             return
     feed = Rss()
     feed.rss = event.args[0]
-    write(feed)
+    write(feed, store(ident(feed)))
     event.done()
 
 
@@ -494,7 +495,7 @@ def imp(event):
             update(feed, obj)
             feed.rss = obj.xmlUrl
             feed.insertid = insertid
-            write(feed)
+            write(feed, store(ident(feed)))
             nrs += 1
     if nrskip:
         event.reply(f"skipped {nrskip} urls.")

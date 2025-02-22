@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0103,C0115,C0116,C0209,C0301,R0903,W0105,E0402
 
 
 "rest"
@@ -13,10 +12,11 @@ import time
 from http.server  import HTTPServer, BaseHTTPRequestHandler
 
 
-from ..clients import Default
-from ..objects import Object
-from ..persist import Workdir, types
-from ..runtime import later, launch
+from nixt.errors  import later
+from nixt.find    import Workdir, types
+from nixt.object import Default, Object
+from nixt.thread import launch
+from nixm.client  import Default
 
 
 DEBUG = False

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # This file is placed in the Public Domain.
-# pylint: disable=C,R0903,W0105,W0201,W0212,W0603,W0613,W0718,E0401
 
 
-"tinder"
+"simulate clients"
 
 
 import os
@@ -17,18 +16,23 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixm.clients import Buffered, Config
-from nixm.command import Commands, Table, command, parse
-from nixm.modules import face
-from nixm.objects import Object, keys
-from nixm.persist import Workdir, elapsed, skel
-from nixm.runtime import Event, launch, errors, later
-
-
-"defines"
+from nixt.client  import Client, Config
+from nixt.command import Commands, command, parse, scan
+from nixt.errors  import errors, later
+from nixt.event   import Event
+from nixt.fleet   import Fleet
+from nixt.find    import Workdir, skel
+from nixt.object  import Object, fmt, items, keys, values
+from nixt.reactor import Reactor
+from nixt.table   import STARTTIME, Table
+from nixt.thread  import Thread, launch
+from nixt.utils   import elapsed
 
 
 Workdir.wdr  = ".test"
+
+
+from nixm import mods as MODS
 
 
 cfg = Config()
@@ -39,7 +43,6 @@ lap = 1
 nrs = 1
 nrcommand = 1
 percall   = 1
-starttime = time.time()
 
 
 events = []
@@ -47,48 +50,46 @@ paylock = _thread.allocate_lock()
 
 
 param = Object()
-param.log = ["bla", ""]
-param.cfg = ["cfg nick=mekker", ""]
-param.cmd = [""]
-param.dne = ["mekker", ""]
 param.dpl = ["hnrss title,url", ""]
-param.exp = ['']
-param.fnd = ["log", ""]
-param.imp = ["tests/feeds.opml", ""]
-param.mod = [""]
-param.mre = [""]
+param.flt = [""]
 param.nme = ["hnrss hackernews", ""]
 param.pwd = ["bla mekker", ""]
-param.rem = ["hnrss", ""]
-param.res = ["hnrss"]
-param.rss = ["http://hnrss.org/newest", ""]
+param.res = ["hnrss", ""]
 param.srv = [""]
-param.tdo = ["mekker", ""]
 param.thr = [""]
+param.cmd = [""]
+param.mod = [""]
+param.mre = [""]
+param.upt = [""]
 param.ver = [""]
+param.fnd = ["log", "rss", "config", "todo", ""]
 
 
-"console"
+pre = Object()
+pre.log = ["bla", ""]
+pre.cfg = ["cfg nick=mekker", ""]
+pre.rss = ["http://hnrss.org/newest", ""]
+pre.tdo = ["mekker", ""]
+pre.imp = ["tests/feeds.opml", ""]
 
 
-class CLI(Buffered):
+post = Object()
+post.exp = ['']
+post.dne = ["hnrss", ""]
+post.rem = ["hnrss", ""]
 
-    def __init__(self):
-        Buffered.__init__(self)
-        self.register("command", command)
+
+class CLI(Client):
 
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
 
 
-"utilities"
-
-
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Config.name.upper()} since {tme}")
-    print(",".join(keys(Commands.cmds)))
+    print(",".join(sorted(keys(Commands.cmds))))
 
 
 def consume(evts):
@@ -101,20 +102,17 @@ def consume(evts):
     return done
 
 
-def payload(clt):
+def payload(clt, cmds):
     nmr = 0
-    for cmdd in keys(param):
-        for ex in getattr(param, cmdd, [""]):
+    for cmd, examples in items(cmds):
+        for example in examples:
             event = Event()
-            event.txt = cmdd + " " + ex
+            event.txt = cmd + " " + example
             event.type = "command"
             events.append(event)
             clt.put(event)
             nmr += 1
     return nmr
-
-
-"runtime"
 
 
 def wrap(function):
@@ -138,9 +136,8 @@ def main():
     global nrs
     global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
-    for mod in Table.scan(face):
-        mod.DEBUG = True
-        mod.output = print
+    for mod in scan(MODS):
+        mod.debug = True
     nrcommand = len(Commands.cmds) or 1
     if "v" in cfg.opts:
         banner()
@@ -154,27 +151,32 @@ def main():
     nrs = cfg.index or 1
     thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt))
+        thrs.append(launch(payload, clt, pre))
     for thr in thrs:
-        thr.join()
+       thr.join()
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, param))
+    for thr in thrs:
+       thr.join()
+    for _nr in range(nrs):
+        thrs.append(launch(payload, clt, post))
+    for thr in thrs:
+       thr.join()
     consume(events)
-    #clt.stop()
-    #clt.wait()
 
 
 if __name__ == "__main__":
     wrap(main)
     endtime = time.time()
-    lap = elapsed(endtime-starttime)
-    percall = (endtime-starttime)/(nrs*nrcommand)
-    for line in errors():
-        print(line)
+    lap = elapsed(endtime-STARTTIME)
+    percall = (endtime-STARTTIME)/(nrs*nrcommand)
+    if "b" in cfg.opts:
+        Thread.bork = True
     if "v" in cfg.opts:
         if not list(errors()):
             print("no errors")
-        if events:
-            for evt in events:
-                print(evt)
-            print(f"{len(events)} events")
+        for line in errors():
+            print(line)
         print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()
+    sys.exit(0)

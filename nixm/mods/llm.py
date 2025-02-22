@@ -59,7 +59,7 @@ def ask(event):
                                             )
         except KeyboardInterrupt:
             return
-        if err:
+        if error:
             break
         stop = False
         for sock in input:

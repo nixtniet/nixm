@@ -16,25 +16,24 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.client  import Client, Config
-from nixt.command import Commands, command, parse, scan
 from nixt.errors  import errors, later
 from nixt.event   import Event
 from nixt.find    import Workdir, pidname
 from nixt.object  import dumps
-from nixt.table   import Table
+from nixm.client  import Client, Config
+from nixm.command import Commands, command, parse, scan
+from nixm.table   import Table
 
 
-if os.path.exists("mods"):
-    import nixm.mods as MODS
-else:
-    MODS = None
+from nixm import mods as MODS
+
 
 
 "defines"
 
 
 cfg      = Config()
+cfg.name = "nixm"
 p        = os.path.join
 pname    = "mods"
 

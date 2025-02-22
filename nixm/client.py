@@ -7,11 +7,11 @@
 import os
 
 
-from .command import command
-from .fleet   import Fleet
-from .object  import Default
-from .output  import Output
-from .reactor import Reactor
+from nixt.fleet   import Fleet
+from nixt.object  import Default
+from nixt.output  import Output
+from nixt.reactor import Reactor
+from nixm.command import command
 
 
 class Config(Default):
@@ -19,7 +19,6 @@ class Config(Default):
     init    = ""
     name    = __file__.rsplit(os.sep, maxsplit=2)[-2]
     opts    = Default()
-    version = 200
 
 
 class Client(Reactor):

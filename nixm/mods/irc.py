@@ -16,10 +16,15 @@ import time
 import _thread
 
 
-from ..command import command
-from ..objects import Object, edit, fmt, keys
-from ..persist import ident, last, write
-from ..runtime import Default, Event, Fleet, Reactor, later, launch
+from nixt.object  import Default, Object, edit, fmt, keys
+from nixt.disk    import ident, write
+from nixt.errors  import later
+from nixt.event   import Event
+from nixt.find    import last
+from nixt.fleet   import Fleet
+from nixt.reactor import Reactor
+from nixt.thread  import launch
+from nixm.command import command
 
 
 "defines"

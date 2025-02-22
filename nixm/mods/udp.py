@@ -12,12 +12,12 @@ import threading
 import time
 
 
-from ..clients import Fleet
-from ..objects import Object
-from ..runtime import launch
+from nixt.fleet  import Fleet
+from nixt.object import Object
+from nixt.thread import launch
 
 
-DEBUG = False
+DEBUG = True
 
 
 "init"

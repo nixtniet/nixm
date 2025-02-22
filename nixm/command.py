@@ -8,8 +8,8 @@ import inspect
 import typing
 
 
-from .object import Default
-from .table  import Table, gettable
+from nixt.object import Default
+from nixm.table  import Table, gettable
 
 
 class Commands:

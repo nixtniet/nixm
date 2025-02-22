@@ -13,9 +13,10 @@ import time
 from http.server  import HTTPServer, BaseHTTPRequestHandler
 
 
-from ..clients import Default
-from ..objects import Object
-from ..runtime import later, launch
+from nixt.errors import later
+from nixt.object import Object
+from nixt.thread import launch
+from nixm.client import Default
 
 
 DEBUG = False
