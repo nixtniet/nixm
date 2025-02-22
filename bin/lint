@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# This file is placed in the Public Domain
+
+
+"linted"
+
+
+import os
+import sys
+
+
+IGNORE = ["---", "Your code"]
+NAME = "nixm"
+
+
+def ignore(txt):
+    for ign in IGNORE:
+        if ign in txt:
+            return True
+    return False
+
+
+def popen(txt):
+    "run text in popen."
+    for line in os.popen(txt).readlines():
+        if not line.strip() or ignore(line):
+             continue
+        print(line.rstrip())
+        sys.stdout.flush()
+
+
+if os.path.exists("bin/clean"):
+    popen("bin/clean")
+
+
+popen(f"pylint {NAME} bin/tinder tests")
