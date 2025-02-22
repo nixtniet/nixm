@@ -38,6 +38,7 @@ classifiers=[
 
 [tool.setuptools]
 packages = [
+    'nixt',
     'nixm',
-    'nixm.modules'
+    'nixm.mods'
 ]

@@ -16,17 +16,19 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.client  import Client, Config
-from nixt.command import Commands, command, parse, scan
 from nixt.errors  import errors, later
 from nixt.event   import Event
 from nixt.fleet   import Fleet
 from nixt.find    import Workdir, skel
 from nixt.object  import Object, fmt, items, keys, values
 from nixt.reactor import Reactor
-from nixt.table   import STARTTIME, Table
 from nixt.thread  import Thread, launch
 from nixt.utils   import elapsed
+
+
+from nixm.client  import Client, Config
+from nixm.command import Commands, command, parse, scan
+from nixm.table   import STARTTIME, Table
 
 
 Workdir.wdr  = ".test"

@@ -20,7 +20,7 @@ from nixt.object  import Default, Object, edit, fmt, keys
 from nixt.disk    import ident, write
 from nixt.errors  import later
 from nixt.event   import Event
-from nixt.find    import last
+from nixt.find    import last, store
 from nixt.fleet   import Fleet
 from nixt.reactor import Reactor
 from nixt.thread  import launch
@@ -625,7 +625,7 @@ def cfg(event):
                    )
     else:
         edit(config, event.sets)
-        write(config, fnm)
+        write(config, fnm or store(ident(config)))
         event.done()
 
 
