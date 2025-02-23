@@ -5,13 +5,19 @@
 
 
 import inspect
+import os
 import typing
 
 
 from nixt.objects import Default
-
-
 from nixm.package import Table, gettable
+
+
+class Config(Default):
+
+    init    = ""
+    name    = __file__.rsplit(os.sep, maxsplit=2)[-2]
+    opts    = Default()
 
 
 class Commands:
