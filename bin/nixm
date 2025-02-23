@@ -36,7 +36,7 @@ from nixm import modules as MODS
 
 Config.name = "nixm"
 p        = os.path.join
-pname    = "nixm.mods"
+pname    = "nixm.modules"
 
 
 def nil(txt):
