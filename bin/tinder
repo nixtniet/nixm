@@ -17,13 +17,10 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.errors  import errors, later
-from nixt.event   import Event
-from nixt.fleet   import Fleet
-from nixt.find    import Workdir, skel
+from nixt.find    import Workdir, elapsed, skel
 from nixt.object  import Object, fmt, items, keys, values
-from nixt.reactor import Reactor
+from nixt.reactor import Event, Fleet, Reactor
 from nixt.thread  import Thread, launch
-from nixt.utils   import elapsed
 
 
 from nixm.client  import Client, Config
@@ -34,7 +31,7 @@ from nixm.table   import STARTTIME, Table
 Workdir.wdr  = ".test"
 
 
-from nixm import mods as MODS
+from nixm import modules as MODS
 
 
 cfg = Config()

@@ -12,7 +12,6 @@ import types
 
 
 from nixt.thread import later, launch
-from nixt.utils  import spl
 
 
 STARTTIME = time.time()
@@ -100,6 +99,14 @@ def gettable():
         #later(ex)
         names = {}
     return names
+
+
+def spl(txt):
+    try:
+        result = txt.split(',')
+    except (TypeError, ValueError):
+        result = txt
+    return [x for x in result if x]
 
 
 def __dir__():

@@ -19,13 +19,13 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from nixt.disk    import ident,write
-from nixt.find    import find, fntime, last, store
-from nixt.object  import Object, fmt, update
-from nixt.thread  import Repeater, launch
-from nixt.utils   import elapsed, spl
-from nixm.client  import Fleet
-
+from nixt.disk   import ident,write
+from nixt.find   import elapsed, find, fntime, last, store
+from nixt.object import Object, fmt, update
+from nixt.thread import launch
+from nixt.timer  import Repeater
+from nixm.client import Fleet
+from nixm.table  import spl
 
 "defines"
 

@@ -7,10 +7,8 @@
 import os
 
 
-from nixt.fleet   import Fleet
 from nixt.object  import Default
-from nixt.output  import Output
-from nixt.reactor import Reactor
+from nixt.reactor import Fleet, Reactor
 from nixm.command import command
 
 
@@ -36,28 +34,6 @@ class Client(Reactor):
 
     def say(self, channel, txt) -> None:
         self.raw(txt)
-
-
-class Buffered(Client, Output):
-
-    def __init__(self):
-        Client.__init__(self)
-        Output.__init__(self)
-
-    def raw(self, txt) -> None:
-        raise NotImplementedError("raw")
-
-    def start(self) -> None:
-        Output.start(self)
-        Client.start(self)
-
-    def stop(self) -> None:
-        Output.stop(self)
-        Client.stop(self)
-
-    def wait(self) -> None:
-        Client.wait(self)
-        Output.wait(self)
 
 
 def __dir__():

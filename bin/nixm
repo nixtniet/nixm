@@ -17,9 +17,11 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixt.errors  import errors, later
-from nixt.event   import Event
 from nixt.find    import Workdir, pidname
 from nixt.object  import dumps
+from nixt.reactor import Event
+
+
 from nixm.client  import Client, Config
 from nixm.command import Commands, command, parse, scan
 from nixm.table   import Table

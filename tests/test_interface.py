@@ -14,14 +14,11 @@ import unittest
 import nixt
 import nixt.disk
 import nixt.errors
-import nixt.event
 import nixt.find
-import nixt.fleet
 import nixt.object
-import nixt.output
 import nixt.reactor
 import nixt.thread
-import nixt.utils
+import nixt.timer
 
 
 from nixt.object import *
@@ -30,14 +27,11 @@ from nixt.object import *
 PACKAGE = [
     'disk',
     'errors',
-    'event',
     'find',
-    'fleet',
     'object',
-    'output',
     'reactor',
     'thread',
-    'utils'
+    'timer'
 ]
 
 

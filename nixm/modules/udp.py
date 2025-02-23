@@ -11,9 +11,9 @@ import threading
 import time
 
 
-from nixt.fleet  import Fleet
-from nixt.object import Object
-from nixt.thread import launch
+from nixt.object  import Object
+from nixt.reactor import Fleet
+from nixt.thread  import launch
 
 
 DEBUG = True
