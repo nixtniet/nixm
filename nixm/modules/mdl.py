@@ -11,7 +11,7 @@ import time
 from nixt.find    import elapsed
 from nixt.object  import Object, construct, keys
 from nixt.reactor import Event, Fleet
-from nixt.timer   import Repeater
+from nixt.timers  import Repeater
 
 
 "defines"

@@ -95,7 +95,7 @@ class Table:
 def gettable():
     try:
         from nixm.lookup import NAMES as names
-    except Exception as ex:
+    except Exception:
         #later(ex)
         names = {}
     return names
