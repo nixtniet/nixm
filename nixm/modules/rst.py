@@ -12,11 +12,13 @@ import time
 from http.server  import HTTPServer, BaseHTTPRequestHandler
 
 
-from nixt.errors  import later
-from nixt.find    import Workdir, types
-from nixt.object import Default, Object
-from nixt.thread import launch
-from nixm.client  import Default
+from nixt.excepts import later
+from nixt.locater import Workdir, types
+from nixt.objects import Default, Object
+from nixt.threads import launch
+
+
+from nixm.clients import Default
 
 
 DEBUG = False

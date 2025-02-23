@@ -16,15 +16,15 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.errors  import errors, later
-from nixt.find    import Workdir, pidname
-from nixt.object  import dumps
+from nixt.excepts import errors, later
+from nixt.locater import Workdir, pidname
+from nixt.objects import dumps
 from nixt.reactor import Event
 
 
-from nixm.client  import Client, Config
+from nixm.clients import Client, Config
 from nixm.command import Commands, command, parse, scan
-from nixm.table   import Table
+from nixm.package import Table
 
 
 from nixm import modules as MODS

@@ -8,11 +8,11 @@ import threading
 import time
 
 
-from nixt.find import elapsed
-from nixt.object import Object, update
+from nixt.locater import elapsed
+from nixt.objects import Object, update
 
 
-from nixm.table import STARTTIME
+from nixm.package import STARTTIME
 
 
 def thr(event):

@@ -7,12 +7,9 @@
 import time
 
 
-from nixt.disk   import ident, write
-from nixt.find   import elapsed, find, fntime, store
-from nixt.object import Object
-
-
-"todo"
+from nixt.persist import ident, write
+from nixt.locater import elapsed, find, fntime, store
+from nixt.objects import Object
 
 
 class Todo(Object):
@@ -20,9 +17,6 @@ class Todo(Object):
     def __init__(self):
         Object.__init__(self)
         self.txt = ''
-
-
-"commands"
 
 
 def dne(event):

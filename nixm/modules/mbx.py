@@ -9,9 +9,9 @@ import os
 import time
 
 
-from nixt.disk   import write
-from nixt.find   import elapsed, find, fntime
-from nixt.object import Object, fmt, update
+from nixt.locater import elapsed, find, fntime
+from nixt.objects import Object, fmt, update
+from nixt.persist import write
 
 
 "email"
@@ -24,7 +24,7 @@ class Email(Object):
         self.text = ""
 
 
-"utility"
+"utilities"
 
 
 def todate(date):

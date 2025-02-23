@@ -15,15 +15,15 @@ import time
 import _thread
 
 
-from nixt.disk    import ident, write
-from nixt.errors  import later
-from nixt.find    import last, store
-from nixt.object  import Default, Object, edit, fmt, keys
+from nixt.persist import ident, write
+from nixt.excepts import later
+from nixt.locater import last, store
+from nixt.objects import Default, Object, edit, fmt, keys
 from nixt.reactor import Event, Fleet, Reactor
-from nixt.thread  import launch
+from nixt.threads import launch
 
 
-from nixm.client  import Config as Main
+from nixm.clients import Config as Main
 from nixm.command import command
 
 

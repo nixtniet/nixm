@@ -9,8 +9,8 @@ import pathlib
 import time
 
 
-from .disk   import Cache, read
-from .object import Object, fqn, items, update
+from .objects import Object, fqn, items, update
+from .persist import Cache, read
 
 
 p = os.path.join

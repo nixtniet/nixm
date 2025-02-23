@@ -4,7 +4,7 @@
 "errors"
 
 
-from nixt.errors import Errors
+from nixt.excepts import Errors
 
 
 def err(event):

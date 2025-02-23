@@ -7,8 +7,10 @@
 import os
 
 
-from nixt.object  import Default
+from nixt.objects import Default
 from nixt.reactor import Fleet, Reactor
+
+
 from nixm.command import command
 
 
