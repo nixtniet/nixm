@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-"show running threads."
+"running threads"
 
 
 import threading
@@ -11,9 +11,6 @@ import time
 from nixt.object import Object, update
 from nixt.utils import elapsed
 from nixm.table import STARTTIME
-
-
-"commands"
 
 
 def thr(event):

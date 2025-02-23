@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0103,C0115,C0116,C0209,C0301,R0903,W0105,W0201,W0613,E0402
 
 
 "rest"
@@ -22,9 +21,6 @@ from nixm.client import Default
 DEBUG = False
 
 
-"init"
-
-
 def init():
     try:
         rest = HTTP((Config.hostname, int(Config.port)), HTTPHandler)
@@ -36,32 +32,15 @@ def init():
     return rest
 
 
-def html2(txt):
-    return """<!doctype html>
-<html>
-   %s
-</html>
-""" % txt
-
-
-"exceptions"
-
-
 class WebError(Exception):
 
     pass
-
-
-"config"
 
 
 class Config(Default):
 
     hostname = "localhost"
     port     = 8000
-
-
-"rest"
 
 
 class HTTP(HTTPServer, Object):
@@ -157,3 +136,11 @@ class HTTPHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             later(ex)
             self.end_headers()
+
+
+def html2(txt):
+    return """<!doctype html>
+<html>
+   %s
+</html>
+""" % txt

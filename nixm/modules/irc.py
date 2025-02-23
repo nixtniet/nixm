@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=R,C0115,C0116,W0105,W0613,W0718,E0402
 
 
 "internet relay chat"
@@ -16,22 +15,24 @@ import time
 import _thread
 
 
-from nixt.object  import Default, Object, edit, fmt, keys
 from nixt.disk    import ident, write
 from nixt.errors  import later
 from nixt.event   import Event
 from nixt.find    import last, store
 from nixt.fleet   import Fleet
+from nixt.object  import Default, Object, edit, fmt, keys
 from nixt.reactor import Reactor
 from nixt.thread  import launch
+
+
+from nixm.client  import Config as Main
 from nixm.command import command
 
 
 "defines"
 
 
-IGNORE = ["PING", "PONG", "PRIVMSG"]
-NAME   = Object.__module__.rsplit(".", maxsplit=2)[-2]
+IGNORE  = ["PING", "PONG", "PRIVMSG"]
 
 
 saylock = _thread.allocate_lock()
@@ -45,7 +46,8 @@ def debug(txt):
 
 
 def output(txt):
-    pass
+    if "v" in Main.opts:
+        print(txt)
 
 
 "init"
@@ -64,18 +66,18 @@ def init():
 
 class Config(Default):
 
-    channel = f'#{NAME}'
+    channel = f'#{Main.name}'
     commands = True
     control = '!'
-    nick = NAME
+    nick = Main.name
     password = ""
     port = 6667
-    realname = NAME
+    realname = Main.name
     sasl = False
     server = 'localhost'
     servermodes = ''
     sleep = 60
-    username = NAME
+    username = Main.name
     users = False
 
     def __init__(self):
@@ -581,7 +583,7 @@ def cb_001(evt):
 def cb_notice(evt):
     bot = Fleet.get(evt.orig)
     if evt.txt.startswith('VERSION'):
-        txt = f'\001VERSION {NAME.upper()} 140 - {bot.cfg.username}\001'
+        txt = f'\001VERSION {Main.name.upper()} 140 - {bot.cfg.username}\001'
         bot.docommand('NOTICE', evt.channel, txt)
 
 

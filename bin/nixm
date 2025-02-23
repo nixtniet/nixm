@@ -25,17 +25,16 @@ from nixm.command import Commands, command, parse, scan
 from nixm.table   import Table
 
 
-from nixm import mods as MODS
+from nixm import modules as MODS
 
 
 
 "defines"
 
 
-cfg      = Config()
-cfg.name = "nixm"
+Config.name = "nixm"
 p        = os.path.join
-pname    = "mods"
+pname    = "nixm.mods"
 
 
 def nil(txt):
@@ -93,7 +92,7 @@ class Console(CLI):
 
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
-    output(f"{cfg.name.upper()} since {tme}")
+    output(f"{Config.name.upper()} since {tme}")
 
 
 def check(txt):
@@ -157,28 +156,27 @@ def privileges():
 
 def background():
     daemon("-v" in sys.argv)
-    Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+    Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
     privileges()
     disable()
-    pidfile(pidname(cfg.name))
+    pidfile(pidname(Config.name))
     Commands.add(cmd)
-    Table.inits(cfg.init or "irc,rss", pname)
+    Table.inits(Config.init or "irc,rss", pname)
     forever()
 
 
 def console():
     import readline # noqa: F401
-    Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+    Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
     enable()
     Commands.add(cmd)
-    parse(cfg, " ".join(sys.argv[1:]))
-    cfg.init = cfg.sets.init or cfg.init
-    cfg.opts = cfg.opts
-    if "v" in cfg.opts:
+    parse(Config, " ".join(sys.argv[1:]))
+    Config.init = Config.sets.init or Config.init
+    if "v" in Config.opts:
         banner()
-    if "i" in cfg.opts or cfg.init:
-        for _mod, thr in Table.inits(cfg.init, pname):
-            if "w" in cfg.opts:
+    if "i" in Config.opts or Config.init:
+        for _mod, thr in Table.inits(Config.init, pname):
+            if "w" in Config.opts:
                 thr.join()
     csl = Console()
     csl.start()
@@ -188,28 +186,28 @@ def console():
 def control():
     if len(sys.argv) == 1:
         return
-    Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+    Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
     enable()
     Commands.add(cmd)
     Commands.add(srv)
     Commands.add(tbl)
-    parse(cfg, " ".join(sys.argv[1:]))
+    parse(Config, " ".join(sys.argv[1:]))
     csl = CLI()
     evt = Event()
     evt.orig = repr(csl)
     evt.type = "command"
-    evt.txt = cfg.otxt
+    evt.txt = Config.otxt
     command(evt)
     evt.wait()
 
 
 def service():
-    Workdir.wdr = os.path.expanduser(f"~/.{cfg.name}")
+    Workdir.wdr = os.path.expanduser(f"~/.{Config.name}")
     enable()
     privileges()
-    pidfile(pidname(cfg.name))
+    pidfile(pidname(Config.name))
     Commands.add(cmd)
-    Table.inits(cfg.init or "irc,rss", pname)
+    Table.inits(Config.init or "irc,rss", pname)
     forever()
 
 
@@ -223,7 +221,7 @@ def cmd(event):
 def srv(event):
     import getpass
     name = getpass.getuser()
-    event.reply(TXT % (cfg.name.upper(), name, name, name, cfg.name))
+    event.reply(TXT % (Config.name.upper(), name, name, name, Config.name))
 
 
 def tbl(event):

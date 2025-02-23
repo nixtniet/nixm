@@ -1,5 +1,4 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,R0912,W0105,E0402
 
 
 "timer"
@@ -10,9 +9,9 @@ import re
 import time as ttime
 
 
-from nixt.disk   import write
+from nixt.disk   import ident, write
 from nixt.event  import Event
-from nixt.find   import find
+from nixt.find   import find, store
 from nixt.fleet  import Fleet
 from nixt.object import update
 from nixt.thread import Timer, launch
@@ -228,9 +227,9 @@ def tmr(event):
     diff = target - ttime.time()
     event.reply("ok " +  elapsed(diff))
     del event.args
-    event.result.append(event.rest)
+    event.reply(event.rest)
     timer = Timer(diff, event.display)
     update(timer, event)
-    write(timer)
+    write(timer, store(ident(timer)))
     launch(timer.start)
     return result
