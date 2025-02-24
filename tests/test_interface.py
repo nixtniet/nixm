@@ -18,7 +18,7 @@ import nixt.find
 import nixt.object
 import nixt.reactor
 import nixt.thread
-import nixt.timers
+import nixt.timer
 
 
 from nixt.object import *
@@ -31,7 +31,7 @@ PACKAGE = [
     'object',
     'reactor',
     'thread',
-    'timers'
+    'timer'
 ]
 
 
