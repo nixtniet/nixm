@@ -193,7 +193,7 @@ code, see the nixt/modules directory for examples.
 **AUTHOR**
 
 |
-| ``Bart Thate`` <``bthate@dds.nl``>
+| ``Bart Thate`` <``nixtniet@gmail.com``>
 |
 
 **COPYRIGHT**
