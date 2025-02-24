@@ -12,10 +12,10 @@ import time
 from http.server  import HTTPServer, BaseHTTPRequestHandler
 
 
-from nixt.errors import later
-from nixt.find   import Workdir, types
-from nixt.object import Default, Object
-from nixt.thread import launch
+from ..errors import later
+from ..find   import Workdir, types
+from ..object import Default, Object
+from ..thread import launch
 
 
 DEBUG = False

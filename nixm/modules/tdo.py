@@ -7,9 +7,9 @@
 import time
 
 
-from nixt.disk   import ident, write
-from nixt.find   import find, fntime, store
-from nixt.object import Object
+from ..disk   import ident, write
+from ..find   import find, fntime, store
+from ..object import Object
 
 
 from .command  import elapsed

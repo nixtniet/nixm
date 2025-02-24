@@ -12,8 +12,9 @@ import types
 import typing
 
 
-from nixt.object import Default
-from nixt.thread import launch
+from ..object import Default
+from ..table  import Table, gettable
+from ..thread import launch
 
 
 STARTTIME = time.time()
@@ -29,7 +30,7 @@ class Config(Default):
 class Commands:
 
     cmds = {}
-    names = {}
+    names = gettable()
 
     @staticmethod
     def add(func, mod=None) -> None:
@@ -57,6 +58,11 @@ class Commands:
 def command(evt) -> None:
     parse(evt)
     func = Commands.get(evt.cmd)
+    if not func:
+        name = Commands.names.get(evt.cmd)
+        if name:
+            mod = Table.load(name)
+            func = getattr(mod, evt.cmd)
     if func:
         func(evt)
         evt.display()

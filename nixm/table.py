@@ -11,7 +11,7 @@ import time
 import types
 
 
-from nixt.threads import later, launch
+from nixm.thread import later, launch
 
 
 STARTTIME = time.time()

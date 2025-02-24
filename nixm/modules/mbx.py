@@ -9,9 +9,9 @@ import os
 import time
 
 
-from nixt.disk   import write
-from nixt.find   import find, fntime
-from nixt.object import Object, fmt, update
+from ..disk   import write
+from ..find   import find, fntime
+from ..object import Object, fmt, update
 
 
 from .command import elapsed

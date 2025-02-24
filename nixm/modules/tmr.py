@@ -9,13 +9,13 @@ import re
 import time as ttime
 
 
-from nixt.disk   import ident, write
-from nixt.event  import Event
-from nixt.find   import find, store
-from nixt.fleet  import Fleet
-from nixt.object import update
-from nixt.thread import launch
-from nixt.timer  import Timer
+from ..disk   import ident, write
+from ..event  import Event
+from ..find   import find, store
+from ..fleet  import Fleet
+from ..object import update
+from ..thread import launch
+from ..timer  import Timer
 
 
 from .command  import elapsed

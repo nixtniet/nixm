@@ -12,9 +12,9 @@ import time
 from http.server  import HTTPServer, BaseHTTPRequestHandler
 
 
-from nixt.excepts import later
-from nixt.objects import Default, Object
-from nixt.threads import launch
+from ..errors import later
+from ..object import Default, Object
+from ..thread import launch
 
 
 DEBUG = False

@@ -16,14 +16,14 @@ import time
 import _thread
 
 
-from nixt.disk    import ident, write
-from nixt.errors  import later
-from nixt.event   import Event
-from nixt.find    import last, store
-from nixt.fleet   import Fleet
-from nixt.object  import Default, Object, edit, fmt, keys
-from nixt.reactor import Reactor
-from nixt.thread  import launch
+from ..disk    import ident, write
+from ..errors  import later
+from ..event   import Event
+from ..find    import last, store
+from ..fleet   import Fleet
+from ..object  import Default, Object, edit, fmt, keys
+from ..reactor import Reactor
+from ..thread  import launch
 
 
 from .command import Config as Main

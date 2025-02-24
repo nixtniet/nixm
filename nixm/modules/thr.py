@@ -8,7 +8,7 @@ import threading
 import time
 
 
-from nixt.object import Object, update
+from ..object import Object, update
 
 
 from .command import elapsed

@@ -7,8 +7,8 @@
 import time
 
 
-from nixt.find   import find, fntime, long, skel, types
-from nixt.object import fmt
+from ..find   import find, fntime, long, skel, types
+from ..object import fmt
 
 
 from .command  import elapsed
