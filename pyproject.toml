@@ -17,6 +17,9 @@ authors = [
 readme = "README.rst"
 description = 'NIXM'
 license = { text='Public Domain'}
+dependencies = [
+    'nixt',
+]
 classifiers=[
     'Development Status :: 4 - Beta',
     'License :: Public Domain',
@@ -37,7 +40,6 @@ script-files = [
     'bin/nixm',
 ]
 packages = [
-    'nixt',
     'nixm',
     'nixm.modules'
 ]
