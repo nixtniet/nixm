@@ -12,8 +12,8 @@ import types
 import typing
 
 
-from nixt.objects import Default
-from nixt.threads import launch
+from nixt.object import Default
+from nixt.thread import launch
 
 
 STARTTIME = time.time()
@@ -65,7 +65,9 @@ def command(evt) -> None:
 
 def inits(pkg, names, pname) -> [types.ModuleType]:
     mods = []
-    for name in spl(names):
+    for name in modules(pkg.__path__[0]):
+        if names and name not in spl(names):
+            continue
         mname = pname + "." + name
         if not mname:
             continue
@@ -83,6 +85,48 @@ def modules(path) -> [str]:
             x[:-3] for x in os.listdir(path)
             if x.endswith(".py") and not x.startswith("__")
            ]
+
+
+"utilities"
+
+
+def elapsed(seconds, short=True) -> str:
+    txt = ""
+    nsec = float(seconds)
+    if nsec < 1:
+        return f"{nsec:.2f}s"
+    yea = 365*24*60*60
+    week = 7*24*60*60
+    nday = 24*60*60
+    hour = 60*60
+    minute = 60
+    yeas = int(nsec/yea)
+    nsec -= yeas*yea
+    weeks = int(nsec/week)
+    nsec -= weeks*week
+    nrdays = int(nsec/nday)
+    nsec -= nrdays*nday
+    hours = int(nsec/hour)
+    nsec -= hours*hour
+    minutes = int(nsec/minute)
+    nsec -= int(minute*minutes)
+    sec = int(nsec)
+    if yeas:
+        txt += f"{yeas}y"
+    if weeks:
+        nrdays += weeks * 7
+    if nrdays:
+        txt += f"{nrdays}d"
+    if short and txt:
+        return txt.strip()
+    if hours:
+        txt += f"{hours}h"
+    if minutes:
+        txt += f"{minutes}m"
+    if sec:
+        txt += f"{sec}s"
+    txt = txt.strip()
+    return txt
 
 
 def parse(obj, txt=None) -> None:
@@ -159,6 +203,7 @@ def scan(pkg, mods=""):
 
 
 def spl(txt):
+    """ iterate over comma seperated string. """
     try:
         result = txt.split(',')
     except (TypeError, ValueError):
@@ -170,6 +215,7 @@ def __dir__():
     return (
         'Commands',
         'command',
+        'elapsed',
         'parse',
         'scan',
         'spl'

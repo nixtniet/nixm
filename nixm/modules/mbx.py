@@ -9,12 +9,12 @@ import os
 import time
 
 
-from nixt.locater import elapsed, find, fntime
-from nixt.objects import Object, fmt, update
-from nixt.persist import write
+from nixt.disk   import write
+from nixt.find   import find, fntime
+from nixt.object import Object, fmt, update
 
 
-"email"
+from .command import elapsed
 
 
 class Email(Object):
@@ -22,9 +22,6 @@ class Email(Object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.text = ""
-
-
-"utilities"
 
 
 def todate(date):

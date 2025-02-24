@@ -16,22 +16,22 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.excepts import errors, later
-from nixt.locater import Workdir, elapsed, skel
-from nixt.objects import Object, fmt, items, keys, values
-from nixt.reactor import Event, Fleet, Reactor
-from nixt.threads import Thread, launch
-
-
-from nixm.clients import Client, Config
-from nixm.command import Commands, command, parse, scan
-from nixm.package import STARTTIME, Table
+from nixt.errors  import Errors, later
+from nixt.event   import Event
+from nixt.find    import Workdir, skel
+from nixt.object  import Object, items, keys
+from nixt.reactor import Client
+from nixt.thread  import Thread, launch
 
 
 Workdir.wdr  = ".test"
 
 
-from nixm import modules as MODS
+import nixm.modules as MODS
+
+
+from nixm.modules.command import Commands, Config, command, elapsed, parse, scan
+from nixm.modules         import STARTTIME
 
 
 cfg = Config()
@@ -79,6 +79,10 @@ post.rem = ["hnrss", ""]
 
 
 class CLI(Client):
+
+    def __init__(self):
+        Client.__init__(self)
+        self.register("command", command)
 
     def raw(self, txt):
         if "v" in cfg.opts:
@@ -172,9 +176,9 @@ if __name__ == "__main__":
     if "b" in cfg.opts:
         Thread.bork = True
     if "v" in cfg.opts:
-        if not list(errors()):
+        if not list(Errors.errors):
             print("no errors")
-        for line in errors():
+        for line in Errors.errors:
             print(line)
         print(f"{lap} {nrs} {nrcommand} {percall}")
     sys.stdout.flush()

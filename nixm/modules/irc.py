@@ -16,19 +16,18 @@ import time
 import _thread
 
 
-from nixt.excepts import later
-from nixt.locater import last, store
-from nixt.objects import Default, Object, edit, fmt, keys
-from nixt.persist import ident, write
-from nixt.reactor import Event, Fleet, Reactor
-from nixt.threads import launch
+from nixt.disk    import ident, write
+from nixt.errors  import later
+from nixt.event   import Event
+from nixt.find    import last, store
+from nixt.fleet   import Fleet
+from nixt.object  import Default, Object, edit, fmt, keys
+from nixt.reactor import Reactor
+from nixt.thread  import launch
 
 
 from .command import Config as Main
 from .command import command
-
-
-"defines"
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]
@@ -50,18 +49,12 @@ def output(txt):
         print(txt)
 
 
-"init"
-
-
 def init():
-    debug(f'{fmt(Config, skip="edited,password")}')
     irc = IRC()
     irc.start()
     irc.events.ready.wait()
+    debug(f'{fmt(Config, skip="edited,password")}')
     return irc
-
-
-"config"
 
 
 class Config(Default):
@@ -91,9 +84,6 @@ class Config(Default):
         self.username = Config.username
 
 
-"textwrap"
-
-
 class TextWrap(textwrap.TextWrapper):
 
     def __init__(self):
@@ -107,9 +97,6 @@ class TextWrap(textwrap.TextWrapper):
 
 
 wrapper = TextWrap()
-
-
-"output"
 
 
 class Output:
@@ -174,9 +161,6 @@ class Output:
         if chan in dir(Output.cache):
             return len(getattr(Output.cache, chan, []))
         return 0
-
-
-"irc"
 
 
 class IRC(Reactor, Output):
@@ -525,9 +509,6 @@ class IRC(Reactor, Output):
 
     def wait(self):
         self.events.ready.wait()
-
-
-"callbacks"
 
 
 def cb_auth(bot, evt):

@@ -8,13 +8,13 @@ import datetime
 import time
 
 
-from nixt.locater  import elapsed
-from nixt.objects import Object, construct, keys
-from nixt.reactor import Event, Fleet
-from nixt.threads import Repeater
+from nixt.event    import Event
+from nixt.fleet    import Fleet
+from nixt.object   import Object, construct, keys
+from nixt.repeater import Repeater
 
 
-"defines"
+from .command import elapsed
 
 
 DAY = 24*60*60
@@ -22,9 +22,6 @@ YEAR = 365*DAY
 SOURCE = "https://github.com/bthate/genocide"
 STARTDATE = "2019-03-04 00:00:00"
 STARTTIME = time.mktime(time.strptime(STARTDATE, "%Y-%m-%d %H:%M:%S"))
-
-
-"init"
 
 
 def init():
@@ -39,9 +36,6 @@ def init():
             sec = seconds(val)
             repeater = Repeater(sec, cbstats, evt, thrname=aliases.get(key))
             repeater.start()
-
-
-"model"
 
 
 oor = """"Totaal onderliggende doodsoorzaken (aantal)";

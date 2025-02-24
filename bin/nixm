@@ -16,10 +16,11 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixt.excepts import errors, later
-from nixt.locater import Workdir, pidname
-from nixt.objects import dumps
-from nixt.reactor import Client, Event
+from nixt.errors  import Errors, later
+from nixt.event   import Event
+from nixt.find    import Workdir, pidname
+from nixt.object  import dumps
+from nixt.reactor import Client
 
 
 if os.path.exists("mods"):
@@ -294,6 +295,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-    for line in errors():
+    for line in Errors.errors:
         output(line)
     sys.exit(0)

@@ -19,17 +19,15 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote_plus, urlencode
 
 
-from nixt.persist import ident,write
-from nixt.locater import elapsed, find, fntime, last, store
-from nixt.objects import Object, fmt, update
-from nixt.threads import Repeater, launch
-from nixt.reactor import Fleet
+from nixt.disk     import ident,write
+from nixt.find     import find, fntime, last, store
+from nixt.fleet    import Fleet
+from nixt.object   import Object, fmt, update
+from nixt.thread   import launch
+from nixt.repeater import Repeater
 
 
-from .command import spl
-
-
-"defines"
+from .command import elapsed, spl
 
 
 DEBUG = False
@@ -40,16 +38,10 @@ importlock = _thread.allocate_lock()
 skipped    = []
 
 
-"init"
-
-
 def init():
     fetcher = Fetcher()
     fetcher.start()
     return fetcher
-
-
-"data"
 
 
 class Feed(Object):
@@ -71,9 +63,6 @@ class Rss(Object):
 class Urls(Object):
 
     pass
-
-
-"fetcher"
 
 
 class Fetcher(Object):
@@ -153,9 +142,6 @@ class Fetcher(Object):
         if repeat:
             repeater = Repeater(300.0, self.run)
             repeater.start()
-
-
-"parser"
 
 
 class Parser:
@@ -370,7 +356,7 @@ def syn(event):
     event.reply(f"{nrs} feeds synced")
 
 
-"OPML"
+"opml"
 
 
 class OPML:
