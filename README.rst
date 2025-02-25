@@ -82,6 +82,25 @@ see list of commands
 | ``pwd,rem,req,res,rss,srv,syn,tdo,thr,upt``
 |
 
+start console
+
+|
+| ``$ nixm -c``
+|
+
+start console and run irc and rss clients
+
+|
+| `` $ nixm -c init=irc,rss``
+|
+
+list available modules
+
+|
+| `` $ nixm mod``
+| ``err,flt,fnd,irc,llm,log,mbx,mdl,mod,req,rss,rst,slg,tdo,thr,tmr,udp,upt``
+|
+
 start daemon
 
 |
