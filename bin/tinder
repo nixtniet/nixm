@@ -16,22 +16,20 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
+from nixm.command import Commands, Config, command, elapsed, parse, scan
 from nixm.errors  import Errors, later
 from nixm.event   import Event
 from nixm.find    import Workdir, skel
 from nixm.object  import Object, items, keys
 from nixm.reactor import Client
 from nixm.thread  import Thread, launch
+from nixm.timer   import STARTTIME
 
 
 Workdir.wdr  = ".test"
 
 
-import nixm.modules as MODS
-
-
-from nixm.modules.command import Commands, Config, command, elapsed, parse, scan
-from nixm.modules         import STARTTIME
+from nixm import modules as MODS
 
 
 cfg = Config()

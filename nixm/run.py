@@ -281,10 +281,10 @@ def main():
         wrap(service)
     else:
         control()
+    for line in Errors.errors:
+        output(line)
 
 
 if __name__ == "__main__":
     main()
-    for line in Errors.errors:
-        output(line)
     sys.exit(0)

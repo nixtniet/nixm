@@ -17,9 +17,6 @@ authors = [
 readme = "README.rst"
 description = 'NIXM'
 license = { text='Public Domain'}
-dependencies = [
-    'nixt',
-]
 classifiers=[
     'Development Status :: 4 - Beta',
     'License :: Public Domain',
@@ -29,6 +26,10 @@ classifiers=[
 ]
 
 
+[project]
+"nixm" = "nixm.run:main"
+
+
 [project.urls]
 'home'   = 'https://pypi.org/project/nixm'
 'bugs'   = 'https://github.com/otpcr/nixm/issues'
@@ -36,9 +37,6 @@ classifiers=[
 
 
 [tool.setuptools]
-script-files = [
-    'bin/nixm',
-]
 packages = [
     'nixm',
     'nixm.modules'
