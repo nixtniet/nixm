@@ -7,15 +7,11 @@
 import importlib
 import os
 import threading
-import time
 import types
 
 
 from nixm.find   import spl
 from nixm.thread import later, launch
-
-
-STARTTIME = time.time()
 
 
 initlock = threading.RLock()

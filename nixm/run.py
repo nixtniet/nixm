@@ -23,10 +23,6 @@ from .reactor import Client
 from . import modules as MODS
 
 
-"defines"
-
-
-Config.name = "nixm"
 p        = os.path.join
 pname    = "nixm.modules"
 
@@ -56,9 +52,6 @@ def handler(signum, frame):
 # signal.signal(signal.SIGHUP, handler)
 
 
-"clients"
-
-
 class CLI(Client):
 
     def __init__(self):
@@ -83,9 +76,6 @@ class Console(CLI):
         evt.txt = input("> ")
         evt.type = "command"
         return evt
-
-
-"utilities"
 
 
 def banner():
