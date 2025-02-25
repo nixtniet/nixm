@@ -12,9 +12,9 @@ import types
 import typing
 
 
-from ..object import Default
-from ..table  import Table, gettable
-from ..thread import launch
+from .object import Default
+from .table  import Table, gettable
+from .thread import launch
 
 
 STARTTIME = time.time()

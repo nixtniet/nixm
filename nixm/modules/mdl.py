@@ -8,13 +8,11 @@ import datetime
 import time
 
 
-from ..event    import Event
-from ..fleet    import Fleet
-from ..object   import Object, construct, keys
-from ..repeater import Repeater
-
-
-from .command import elapsed
+from ..event  import Event
+from ..find   import elapsed
+from ..fleet  import Fleet
+from ..object import Object, construct, keys
+from ..timer  import Repeater
 
 
 DAY = 24*60*60

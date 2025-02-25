@@ -11,6 +11,9 @@ import time
 from .thread import launch, name
 
 
+STARTTIME = time.time()
+
+
 class Timer:
 
     def __init__(self, sleep, func, *args, thrname=None, **kwargs):
@@ -42,7 +45,16 @@ class Timer:
             self.timer.cancel()
 
 
+class Repeater(Timer):
+
+    def run(self) -> None:
+        launch(self.start)
+        super().run()
+
+
 def __dir__():
     return (
-        'Timer',
+        'STARTTIME',
+        'Repeater',
+        'Timer'
     )

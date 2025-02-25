@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # This file is placed in the Public Domain.
 
 
@@ -13,22 +12,15 @@ import time
 import _thread
 
 
-sys.path.insert(0, os.getcwd())
+from .command import Commands, Config, command, inits, parse, scan
+from .errors  import Errors, later
+from .event   import Event
+from .find    import Workdir, pidname
+from .object  import dumps
+from .reactor import Client
 
 
-from nixm.errors  import Errors, later
-from nixm.event   import Event
-from nixm.find    import Workdir, pidname
-from nixm.object  import dumps
-from nixm.reactor import Client
-
-
-if os.path.exists("mods"):
-    import mods as MODS
-    from mods.command import Commands, Config, command, inits, parse
-else:
-    from nixm import modules as MODS
-    from nixm.modules.command import Commands, Config, command, inits, parse
+from . import modules as MODS
 
 
 "defines"
@@ -167,7 +159,7 @@ def background():
     disable()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
-    inits(MODS,Config.init or "irc,rss", pname)
+    inits(MODS, Config.init or "irc,rss", pname)
     forever()
 
 
@@ -231,6 +223,7 @@ def srv(event):
 
 
 def tbl(event):
+    scan(MODS)
     event.reply("# This file is placed in the Public Domain.")
     event.reply("")
     event.reply("")

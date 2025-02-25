@@ -16,6 +16,8 @@ import time
 import _thread
 
 
+from ..command import Config as Main
+from ..command import command
 from ..disk    import ident, write
 from ..errors  import later
 from ..event   import Event
@@ -24,10 +26,6 @@ from ..fleet   import Fleet
 from ..object  import Default, Object, edit, fmt, keys
 from ..reactor import Reactor
 from ..thread  import launch
-
-
-from .command import Config as Main
-from .command import command
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]

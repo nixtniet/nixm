@@ -11,6 +11,7 @@ import time
 import types
 
 
+from nixm.find   import spl
 from nixm.thread import later, launch
 
 
@@ -99,14 +100,6 @@ def gettable():
         #later(ex)
         names = {}
     return names
-
-
-def spl(txt):
-    try:
-        result = txt.split(',')
-    except (TypeError, ValueError):
-        result = txt
-    return [x for x in result if x]
 
 
 def __dir__():
