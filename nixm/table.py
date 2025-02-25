@@ -95,11 +95,11 @@ class Table:
 
 def gettable():
     try:
-        from nixm.lookup import NAMES as names
+        from nixm.names import NAMES
     except Exception:
         #later(ex)
-        names = {}
-    return names
+        NAMES = {}
+    return NAMES
 
 
 def __dir__():

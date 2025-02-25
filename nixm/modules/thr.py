@@ -8,9 +8,9 @@ import threading
 import time
 
 
-from ..find   import elapsed
-from ..object import Object, update
-from ..timer  import STARTTIME
+from ..command import STARTTIME
+from ..find    import elapsed
+from ..object  import Object, update
 
 
 def thr(event):

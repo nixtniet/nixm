@@ -14,8 +14,7 @@ from ..event  import Event
 from ..find   import elapsed, find, store
 from ..fleet  import Fleet
 from ..object import update
-from ..thread import launch
-from ..timer  import Timer
+from ..thread import Timer, launch
 
 
 MONTHS = [
