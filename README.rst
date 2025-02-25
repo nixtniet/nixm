@@ -163,14 +163,18 @@ opml
 ``nixm`` runs it's modules in the package edit a file in nixm/modules/<name>.py
 and add the following for ``hello world``
 
-::
+|
+|    def hello(event):
+|        event.reply("hello world !!")
+|
 
-    def hello(event):
-        event.reply("hello world !!")
+save this and recreate the dispatch table
 
+|
+| ``$ nixm tbl > nixm/names.py``
+|
 
-save this and import your filename. Add your module to nixm/modules/face.py
-and ``nixm`` can execute the ``hello`` command now.
+``nixm`` can execute the ``hello`` command now.
 
 |
 | ``$ nixm hello``
