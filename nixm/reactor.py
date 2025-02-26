@@ -10,7 +10,7 @@ import _thread
 
 
 from .errors import later
-from .fleet  import Fleet
+from .run    import Fleet
 from .thread import launch
 
 

@@ -9,8 +9,7 @@ import pathlib
 import time
 
 
-from .disk   import read
-from .cache  import Cache
+from .disk   import Cache, read
 from .object import Object, fqn, items, update
 
 

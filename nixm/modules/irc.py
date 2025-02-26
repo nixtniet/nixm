@@ -22,10 +22,10 @@ from ..disk    import ident, write
 from ..errors  import later
 from ..event   import Event
 from ..find    import last, store
-from ..fleet   import Fleet
 from ..object  import Default, Object, edit, fmt, keys
 from ..reactor import Reactor
 from ..thread  import launch
+from ..run     import Fleet
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]

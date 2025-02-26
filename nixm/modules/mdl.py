@@ -11,8 +11,8 @@ import time
 from ..command import STARTTIME
 from ..event   import Event
 from ..find    import elapsed
-from ..fleet   import Fleet
 from ..object  import Object, construct, keys
+from ..run     import Fleet
 from ..thread  import Repeater
 
 

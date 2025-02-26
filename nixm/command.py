@@ -12,6 +12,7 @@ import types
 import typing
 
 
+from .find   import spl
 from .object import Default
 from .table  import Table, gettable
 from .thread import launch

@@ -12,9 +12,9 @@ import time as ttime
 from ..disk   import ident, write
 from ..event  import Event
 from ..find   import elapsed, find, store
-from ..fleet  import Fleet
 from ..object import update
 from ..thread import Timer, launch
+from ..run    import Fleet
 
 
 MONTHS = [
