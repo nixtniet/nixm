@@ -1,31 +1,123 @@
 # This file is placed in the Public Domain.
 
 
-"user commands"
+"NIXT"
 
 
+import importlib
 import inspect
 import os
-import sys
+import threading
 import time
 import types
 import typing
 
 
+from .errors import later
 from .find   import spl
 from .object import Default
-from .table  import Table, gettable
 from .thread import launch
 
 
 STARTTIME = time.time()
 
 
+initlock = threading.RLock()
+loadlock = threading.RLock()
+
+
 class Config(Default):
 
-    init    = ""
-    name    = __name__.split(".")[-2]
-    opts    = Default()
+    init = ""
+    #name = sys.argv[0].split(os.sep)[-1]
+    name = Default.__module__.split(".")[0]
+    opts = Default()
+
+
+def gettable():
+    try:
+        from .names import NAMES
+    except Exception:
+        #later(ex)
+        NAMES = {}
+    return NAMES
+
+
+class Table:
+
+    debug   = False
+    ignore  = ["command", "names", "llm", "rst", "web", "udp", "wsd"]
+    mods    = {}
+
+    @staticmethod
+    def add(mod) -> None:
+        Table.mods[mod.__name__] = mod
+
+    @staticmethod
+    def all(pkg, mods="") -> [types.ModuleType]:
+        path = pkg.__path__[0]
+        pname = pkg.__name__
+        res = []
+        for nme in Table.modules(path):
+            if nme in Table.ignore:
+                continue
+            if "__" in nme:
+                continue
+            if mods and nme not in spl(mods):
+                continue
+            name = pname + "." + nme
+            if not name:
+                continue
+            mod = Table.load(name)
+            if not mod:
+                continue
+            res.append(mod)
+        return res
+
+    @staticmethod
+    def get(name) -> types.ModuleType:
+        return Table.mods.get(name, None)
+
+    @staticmethod
+    def inits(names, pname) -> [types.ModuleType]:
+        with initlock:
+            mods = []
+            for name in spl(names):
+                mname = pname + "." + name
+                if not mname:
+                    continue
+                mod = Table.load(mname)
+                if not mod:
+                    continue
+                if "init" in dir(mod):
+                    thr = launch(mod.init)
+                mods.append((mod, thr))
+            return mods
+
+    @staticmethod
+    def load(name) -> types.ModuleType:
+        for ign in Table.ignore:
+            if ign in name:
+                return
+        with loadlock:
+            pname = ".".join(name.split(".")[:-1])
+            module = Table.mods.get(name)
+            if not module:
+                try:
+                    Table.mods[name] = module = importlib.import_module(name, pname)
+                    if Table.debug:
+                        Table.mods[name].DEBUG = True
+                except Exception as exc:
+                    later(exc)
+            return module
+
+    @staticmethod
+    def modules(path) -> [str]:
+        return [
+                x[:-3] for x in os.listdir(path)
+                if x.endswith(".py") and not x.startswith("__") and
+                x not in Table.disable
+               ]
 
 
 class Commands:
@@ -70,12 +162,12 @@ def command(evt) -> None:
     evt.ready()
 
 
-def inits(pkg, names, pname) -> [types.ModuleType]:
+def inits(pkg, names) -> [types.ModuleType]:
     mods = []
     for name in modules(pkg.__path__[0]):
         if names and name not in spl(names):
             continue
-        mname = pname + "." + name
+        mname = pkg.__name__ + "." + name
         if not mname:
             continue
         mod = getattr(pkg, name, None)
@@ -92,9 +184,6 @@ def modules(path) -> [str]:
             x[:-3] for x in os.listdir(path)
             if x.endswith(".py") and not x.startswith("__")
            ]
-
-
-"utilities"
 
 
 def parse(obj, txt=None) -> None:
@@ -153,16 +242,15 @@ def parse(obj, txt=None) -> None:
 def scan(pkg, mods=""):
     res = []
     path = pkg.__path__[0]
-    pname = pkg.__name__
     for nme in modules(path):
         if "__" in nme:
             continue
         if mods and nme not in spl(mods):
             continue
-        name = pname + "." + nme
+        name = pkg.__name__ + "." + nme
         if not name:
             continue
-        mod = getattr(pkg, nme, None)
+        mod = Table.load(name)
         if not mod:
             continue
         Commands.scan(mod)
@@ -174,7 +262,9 @@ def __dir__():
     return (
         'STARTTIME',
         'Commands',
+        'Table',
         'command',
+        'gettable'
         'inits',
         'parse',
         'scan',

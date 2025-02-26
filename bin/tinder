@@ -16,13 +16,13 @@ import _thread
 sys.path.insert(0, os.getcwd())
 
 
-from nixm.command import STARTTIME, Commands, Config
-from nixm.command import command, parse, scan
+from nixm.cmnd    import STARTTIME, Commands, Config
+from nixm.cmnd    import command, parse, scan
 from nixm.errors  import Errors, later
 from nixm.event   import Event
 from nixm.find    import Workdir, elapsed, skel
+from nixm.handler import Client
 from nixm.object  import Object, items, keys
-from nixm.reactor import Client
 from nixm.thread  import Thread, launch
 
 

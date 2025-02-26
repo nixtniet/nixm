@@ -12,12 +12,12 @@ import time
 import _thread
 
 
-from .command import Commands, Config, command, inits, parse, scan
+from .cmnd    import Commands, Config, command, inits, parse, scan
 from .errors  import Errors, later
 from .event   import Event
 from .find    import Workdir, pidname
+from .handler import Client
 from .object  import dumps
-from .reactor import Client
 
 
 from . import modules as MODS
@@ -163,7 +163,7 @@ def console():
     if "v" in Config.opts:
         banner()
     if "i" in Config.opts or Config.init:
-        for _mod, thr in inits(MODS, Config.init, pname):
+        for _mod, thr in inits(MODS, Config.init):
             if "w" in Config.opts:
                 thr.join()
     csl = Console()
@@ -271,10 +271,10 @@ def main():
         wrap(service)
     else:
         control()
-    for line in Errors.errors:
-        output(line)
 
 
 if __name__ == "__main__":
     main()
+    for line in Errors.errors:
+        output(line)
     sys.exit(0)

@@ -10,14 +10,14 @@ import _thread
 
 
 from .errors import later
-from .run    import Fleet
+from .fleet  import Fleet
 from .thread import launch
 
 
 cblock = threading.RLock()
 
 
-class Reactor:
+class Handler:
 
     def __init__(self):
         self.cbs     = {}
@@ -74,10 +74,10 @@ class Reactor:
         self.ready.wait()
 
 
-class Client(Reactor):
+class Client(Handler):
 
     def __init__(self):
-        Reactor.__init__(self)
+        Handler.__init__(self)
         Fleet.add(self)
 
     def announce(self, txt):
@@ -93,5 +93,5 @@ class Client(Reactor):
 def __dir__():
     return (
         'Client',
-        'Reactor'
+        'Handler'
     )

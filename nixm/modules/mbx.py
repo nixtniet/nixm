@@ -10,11 +10,8 @@ import time
 
 
 from ..disk   import write
-from ..find   import find, fntime
+from ..find   import elapsed, find, fntime
 from ..object import Object, fmt, update
-
-
-from .command import elapsed
 
 
 class Email(Object):

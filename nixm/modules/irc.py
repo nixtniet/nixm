@@ -16,16 +16,16 @@ import time
 import _thread
 
 
-from ..command import Config as Main
-from ..command import command
+from ..cmnd    import Config as Main
+from ..cmnd    import command
 from ..disk    import ident, write
 from ..errors  import later
 from ..event   import Event
 from ..find    import last, store
+from ..fleet   import Fleet
 from ..object  import Default, Object, edit, fmt, keys
-from ..reactor import Reactor
+from ..handler import Handler
 from ..thread  import launch
-from ..run     import Fleet
 
 
 IGNORE  = ["PING", "PONG", "PRIVMSG"]
@@ -161,10 +161,10 @@ class Output:
         return 0
 
 
-class IRC(Reactor, Output):
+class IRC(Handler, Output):
 
     def __init__(self):
-        Reactor.__init__(self)
+        Handler.__init__(self)
         Output.__init__(self)
         self.buffer = []
         self.cfg = Config()
@@ -488,7 +488,7 @@ class IRC(Reactor, Output):
         self.events.connected.clear()
         self.events.joined.clear()
         launch(Output.out, self)
-        Reactor.start(self)
+        Handler.start(self)
         launch(
                self.doconnect,
                self.cfg.server or "localhost",
@@ -503,7 +503,7 @@ class IRC(Reactor, Output):
         self.disconnect()
         self.dostop.set()
         self.oput(None, None)
-        Reactor.stop(self)
+        Handler.stop(self)
 
     def wait(self):
         self.events.ready.wait()
