@@ -17,7 +17,7 @@ class Thread(threading.Thread):
 
     bork = False
 
-    def __init__(self, func, thrname, *args, daemon=True, **kwargs):
+    def __init__(self, func, thrname, *args, daemon=False, **kwargs):
         super().__init__(None, self.run, name, (), {}, daemon=daemon)
         self.name = thrname
         self.queue = queue.Queue()

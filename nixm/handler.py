@@ -6,15 +6,47 @@
 
 import queue
 import threading
+import time
 import _thread
 
 
 from .errors import later
 from .fleet  import Fleet
+from .object import Default
 from .thread import launch
 
 
 cblock = threading.RLock()
+lock   = threading.RLock()
+
+
+class Event(Default):
+
+    def __init__(self):
+        Default.__init__(self)
+        self._ready = threading.Event()
+        self._thr   = None
+        self.ctime  = time.time()
+        self.result = {}
+        self.type   = "event"
+        self.txt    = ""
+
+    def display(self):
+        Fleet.display(self)
+
+    def done(self) -> None:
+        self.reply("ok")
+
+    def ready(self) -> None:
+        self._ready.set()
+
+    def reply(self, txt) -> None:
+        self.result[time.time()] = txt
+
+    def wait(self) -> None:
+        self._ready.wait()
+        if self._thr:
+            self._thr.join()
 
 
 class Handler:
@@ -32,28 +64,22 @@ class Handler:
                 evt.ready()
                 return
             try:
-                evt._thr = launch(func, evt, name=evt.cmd or evt.txt)
+                evt._thr = launch(func, evt, name=evt.txt.split()[0])
             except Exception as ex:
                 later(ex)
                 evt.ready()
 
     def loop(self) -> None:
-        evt = None
         while not self.stopped.is_set():
             try:
-                evt = self.poll()
+                evt = self.queue.get()
                 if evt is None:
                     break
                 evt.orig = repr(self)
                 self.callback(evt)
             except (KeyboardInterrupt, EOFError):
-                if evt:
-                    evt.ready()
                 _thread.interrupt_main()
         self.ready.set()
-
-    def poll(self):
-        return self.queue.get()
 
     def put(self, evt) -> None:
         self.queue.put(evt)
@@ -83,6 +109,24 @@ class Client(Handler):
     def announce(self, txt):
         pass
 
+    def loop(self) -> None:
+        evt = None
+        while not self.stopped.is_set():
+            try:
+                evt = self.poll()
+                if evt is None:
+                    break
+                evt.orig = repr(self)
+                self.callback(evt)
+            except (KeyboardInterrupt, EOFError):
+                if evt:
+                    evt.ready()
+                _thread.interrupt_main()
+        self.ready.set()
+
+    def poll(self):
+        return self.queue.get()
+
     def raw(self, txt) -> None:
         raise NotImplementedError("raw")
 
@@ -93,5 +137,6 @@ class Client(Handler):
 def __dir__():
     return (
         'Client',
+        'Event',
         'Handler'
     )

@@ -17,13 +17,15 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixm.cmnd    import STARTTIME, Commands, Config
-from nixm.cmnd    import command, parse, scan
+from nixm.cmnd    import command, parse
 from nixm.errors  import Errors, later
-from nixm.event   import Event
-from nixm.find    import Workdir, elapsed, skel
-from nixm.handler import Client
+from nixm.find    import Workdir, skel
+from nixm.handler import Client, Event
+from nixm.main    import scan
 from nixm.object  import Object, items, keys
+from nixm.table   import Table
 from nixm.thread  import Thread, launch
+from nixm.utils   import elapsed
 
 
 Workdir.wdr  = ".test"
@@ -59,6 +61,10 @@ param.mod = [""]
 param.mre = [""]
 param.upt = [""]
 param.ver = [""]
+param.req = [""]
+param.slg = [""]
+param.now = [""]
+param.dis = [""]
 param.fnd = ["log", "rss", "config", "todo", ""]
 
 
@@ -72,7 +78,7 @@ pre.imp = ["tests/feeds.opml", ""]
 
 post = Object()
 post.exp = ['']
-post.dne = ["hnrss", ""]
+post.dne = ["mekker", ""]
 post.rem = ["hnrss", ""]
 
 
@@ -85,6 +91,9 @@ class CLI(Client):
     def raw(self, txt):
         if "v" in cfg.opts:
             print(txt)
+
+
+clt = CLI()
 
 
 def banner():
@@ -105,7 +114,9 @@ def consume(evts):
 
 def payload(clt, cmds):
     nmr = 0
-    for cmd, examples in items(cmds):
+    keyz = keys(cmds)
+    for cmd in keyz:
+        examples = getattr(cmds, cmd)
         for example in examples:
             event = Event()
             event.txt = cmd + " " + example
@@ -137,6 +148,8 @@ def main():
     global nrs
     global nrcommand
     parse(cfg, " ".join(sys.argv[1:]))
+    if "b" in cfg.opts:
+        Thread.bork = True
     for mod in scan(MODS):
         mod.debug = True
     nrcommand = len(Commands.cmds) or 1
@@ -147,23 +160,23 @@ def main():
         if os.path.exists(Workdir.wdr):
             shutil.rmtree(Workdir.wdr)
     skel()
-    clt = CLI()
     clt.start()
     nrs = cfg.index or 1
-    thrs = []
     for _nr in range(nrs):
-        thrs.append(launch(payload, clt, pre))
-    for thr in thrs:
-       thr.join()
+        payload(clt, pre)
+    thrs = []
     for _nr in range(nrs):
         thrs.append(launch(payload, clt, param))
     for thr in thrs:
        thr.join()
+    thrs = []
     for _nr in range(nrs):
         thrs.append(launch(payload, clt, post))
     for thr in thrs:
        thr.join()
     consume(events)
+    clt.stop()
+    clt.wait()
 
 
 if __name__ == "__main__":
@@ -171,13 +184,9 @@ if __name__ == "__main__":
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
     percall = (endtime-STARTTIME)/(nrs*nrcommand)
-    if "b" in cfg.opts:
-        Thread.bork = True
     if "v" in cfg.opts:
         if not list(Errors.errors):
             print("no errors")
         for line in Errors.errors:
             print(line)
         print(f"{lap} {nrs} {nrcommand} {percall}")
-    sys.stdout.flush()
-    sys.exit(0)

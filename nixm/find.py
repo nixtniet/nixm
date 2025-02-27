@@ -6,11 +6,12 @@
 
 import os
 import pathlib
+import threading
 import time
 
 
-from .disk   import Cache, read
-from .object import Object, fqn, items, update
+from .disk   import Cache, lock, read
+from .object import Object, fqn, items, search, update
 
 
 p = os.path.join
@@ -58,19 +59,22 @@ def types() -> [str]:
 
 
 def fns(clz) -> [str]:
-    dname = ''
-    pth = store(clz)
-    for rootdir, dirs, _files in os.walk(pth, topdown=False):
-        if dirs:
-            for dname in sorted(dirs):
-                if dname.count('-') == 2:
-                    ddd = p(rootdir, dname)
-                    for fll in os.listdir(ddd):
-                        yield p(ddd, fll)
+    with lock:
+        res = []
+        pth = store(clz)
+        for rootdir, dirs, _files in os.walk(pth, topdown=False):
+            if dirs:
+                for dname in sorted(dirs):
+                    if dname.count('-') == 2:
+                        ddd = p(rootdir, dname)
+                        for fll in os.listdir(ddd):
+                            res.append(p(ddd, fll))
+        return res
 
 
 def fntime(daystr) -> int:
     datestr = ' '.join(daystr.split(os.sep)[-2:])
+    datestr = datestr.replace("_", " ")
     if '.' in datestr:
         datestr, rest = datestr.rsplit('.', 1)
     else:
@@ -82,72 +86,23 @@ def fntime(daystr) -> int:
 
 
 def find(clz, selector=None, deleted=False, matching=False) -> [Object]:
-    skel()
-    res = []
-    clz = long(clz)
-    for fnm in fns(clz):
-        obj = Cache.get(fnm)
-        if not obj:
-            obj = Object()
-            read(obj, fnm)
-            Cache.add(fnm, obj)
-        if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
-            continue
-        if selector and not search(obj, selector, matching):
-            continue
-        res.append((fnm, obj))
-    return sorted(res, key=lambda x: fntime(x[0]))
-
-
-"utilities"
-
-
-def elapsed(seconds, short=True) -> str:
-    txt = ""
-    nsec = float(seconds)
-    if nsec < 1:
-        return f"{nsec:.2f}s"
-    yea = 365*24*60*60
-    week = 7*24*60*60
-    nday = 24*60*60
-    hour = 60*60
-    minute = 60
-    yeas = int(nsec/yea)
-    nsec -= yeas*yea
-    weeks = int(nsec/week)
-    nsec -= weeks*week
-    nrdays = int(nsec/nday)
-    nsec -= nrdays*nday
-    hours = int(nsec/hour)
-    nsec -= hours*hour
-    minutes = int(nsec/minute)
-    nsec -= int(minute*minutes)
-    sec = int(nsec)
-    if yeas:
-        txt += f"{yeas}y"
-    if weeks:
-        nrdays += weeks * 7
-    if nrdays:
-        txt += f"{nrdays}d"
-    if short and txt:
-        return txt.strip()
-    if hours:
-        txt += f"{hours}h"
-    if minutes:
-        txt += f"{minutes}m"
-    if sec:
-        txt += f"{sec}s"
-    txt = txt.strip()
-    return txt
-
-
-def spl(txt):
-    """ iterate over comma seperated string. """
-    try:
-        result = txt.split(',')
-    except (TypeError, ValueError):
-        result = txt
-    return [x for x in result if x]
+    with lock:
+        res = []
+        skel()
+        res = []
+        clz = long(clz)
+        for pth in fns(clz):
+            obj = Cache.get(pth)
+            if not obj:
+                obj = Object()
+                read(obj, pth)
+                Cache.add(pth, obj)
+            if not deleted and '__deleted__' in dir(obj) and obj.__deleted__:
+                continue
+            if selector and not search(obj, selector, matching):
+                continue
+            res.append((pth, obj))
+        return sorted(res, key=lambda x: fntime(x[0]))
 
 
 "methods"
@@ -168,24 +123,6 @@ def last(obj, selector=None) -> Object:
     return res
 
 
-def search(obj, selector, matching=None) -> bool:
-    res = False
-    if not selector:
-        return res
-    for key, value in items(selector):
-        val = getattr(obj, key, None)
-        if not val:
-            continue
-        if matching and value == val:
-            res = True
-        elif str(value).lower() in str(val).lower() or value == "match":
-            res = True
-        else:
-            res = False
-            break
-    return res
-
-
 def __dir__():
     return (
         'Workdir',
@@ -194,7 +131,6 @@ def __dir__():
         'find',
         'last',
         'pidname',
-        'search',
         'skel',
         'spl',
         'types'

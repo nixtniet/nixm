@@ -4,6 +4,12 @@
 "dict of bots"
 
 
+import threading
+
+
+lock = threading.RLock()
+
+
 class Fleet:
 
     bots = {}
@@ -19,9 +25,10 @@ class Fleet:
 
     @staticmethod
     def display(evt) -> None:
-        for tme in sorted(evt.result):
-            text = evt.result[tme]
-            Fleet.say(evt.orig, evt.channel, text)
+        with lock:
+            for tme in sorted(evt.result):
+                Fleet.say(evt.orig, evt.channel, evt.result[tme])
+            evt.ready()
 
     @staticmethod
     def first() -> None:

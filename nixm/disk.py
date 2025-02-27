@@ -54,13 +54,12 @@ def ident(obj) -> str:
 
 
 def read(obj, pth):
-    with lock:
-        with open(pth, 'r', encoding='utf-8') as ofile:
-            try:
-                obj2 = loads(ofile.read())
-                update(obj, obj2)
-            except json.decoder.JSONDecodeError as ex:
-                raise DecodeError(pth) from ex
+    with open(pth, 'r', encoding='utf-8') as ofile:
+        try:
+            obj2 = loads(ofile.read())
+            update(obj, obj2)
+        except json.decoder.JSONDecodeError as ex:
+            raise DecodeError(pth) from ex
     return pth
 
 

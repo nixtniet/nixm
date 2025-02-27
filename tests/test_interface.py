@@ -15,8 +15,9 @@ import nixm
 import nixm.disk
 import nixm.errors
 import nixm.find
+import nixm.handler
 import nixm.object
-import nixm.reactor
+import nixm.table
 import nixm.thread
 
 
@@ -24,12 +25,13 @@ from nixm.object import *
 
 
 PACKAGE = [
-    'cache',
+    'cmnd',
     'disk',
     'errors',
     'find',
+    'handler',
     'object',
-    'reactor',
+    'table',
     'thread'
 ]
 

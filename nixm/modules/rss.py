@@ -20,10 +20,11 @@ from urllib.parse import quote_plus, urlencode
 
 
 from ..disk   import ident,write
-from ..find   import elapsed, find, fntime, last, spl, store
+from ..find   import find, fntime, last, store
 from ..fleet  import Fleet
 from ..object import Object, fmt, update
 from ..thread import Repeater, launch
+from ..utils  import elapsed, spl
 
 
 DEBUG = False
@@ -434,18 +435,19 @@ def shortid():
 
 
 def exp(event):
-    event.reply(TEMPLATE)
-    nrs = 0
-    for _fn, ooo in find("rss"):
-        nrs += 1
-        obj = Rss()
-        update(obj, ooo)
-        name = f"url{nrs}"
-        txt = f'<outline name="{name}" display_list="{obj.display_list}" xmlUrl="{obj.rss}"/>'
-        event.reply(" "*12 + txt)
-    event.reply(" "*8 + "</outline>")
-    event.reply("    <body>")
-    event.reply("</opml>")
+    with importlock:
+        event.reply(TEMPLATE)
+        nrs = 0
+        for _fn, ooo in find("rss"):
+            nrs += 1
+            obj = Rss()
+            update(obj, ooo)
+            name = f"url{nrs}"
+            txt = f'<outline name="{name}" display_list="{obj.display_list}" xmlUrl="{obj.rss}"/>'
+            event.reply(" "*12 + txt)
+        event.reply(" "*8 + "</outline>")
+        event.reply("    <body>")
+        event.reply("</opml>")
 
 
 def imp(event):

@@ -1,4 +1,4 @@
-# This file is placed in the Public Domain.
+ # This file is placed in the Public Domain.
 
 
 "Genocide model of the Netherlands since 4 March 2019"
@@ -8,11 +8,11 @@ import datetime
 import time
 
 
-from ..event  import Event
-from ..find   import elapsed
-from ..fleet  import Fleet
-from ..object import Object, construct, keys
-from ..thread import Repeater
+from ..fleet   import Fleet
+from ..handler import Event
+from ..object  import Object, construct, keys
+from ..thread  import Repeater
+from ..utils   import elapsed
 
 
 DAY = 24*60*60

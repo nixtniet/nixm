@@ -9,15 +9,16 @@ import pathlib
 import signal
 import sys
 import time
+import types
 import _thread
 
 
-from .cmnd    import Commands, Config, command, inits, parse, scan
+from .cmnd    import Commands, Config, command, parse
 from .errors  import Errors, later
-from .event   import Event
 from .find    import Workdir, pidname
-from .handler import Client
+from .handler import Client, Event
 from .object  import dumps
+from .table   import Table
 
 
 from . import modules as MODS
@@ -122,6 +123,30 @@ def forever():
             _thread.interrupt_main()
 
 
+def inits(pkg, names) -> [types.ModuleType]:
+    mods = []
+    for name in modules(pkg.__path__[0]):
+        if names and name not in spl(names):
+            continue
+        mname = pkg.__name__ + "." + name
+        if not mname:
+            continue
+        mod = getattr(pkg, name, None)
+        if not mod:
+             continue
+        if "init" in dir(mod):
+           thr = launch(mod.init)
+           mods.append((mod, thr))
+    return mods
+
+
+def modules(path) -> [str]:
+    return [
+            x[:-3] for x in os.listdir(path)
+            if x.endswith(".py") and not x.startswith("__")
+           ]
+
+
 def pidfile(filename):
     if os.path.exists(filename):
         os.unlink(filename)
@@ -137,6 +162,25 @@ def privileges():
     pwnam2 = pwd.getpwnam(getpass.getuser())
     os.setgid(pwnam2.pw_gid)
     os.setuid(pwnam2.pw_uid)
+
+
+def scan(pkg, mods=""):
+    res = []
+    path = pkg.__path__[0]
+    for nme in modules(path):
+        if "__" in nme:
+            continue
+        if mods and nme not in spl(mods):
+            continue
+        name = pkg.__name__ + "." + nme
+        if not name:
+            continue
+        mod = Table.load(name)
+        if not mod:
+            continue
+        Commands.scan(mod)
+        res.append(mod)
+    return res
 
 
 "scripts"

@@ -9,9 +9,8 @@ import time
 
 
 from ..cmnd   import STARTTIME
-from ..find   import elapsed
 from ..object import Object, update
-
+from ..utils  import elapsed
 
 def thr(event):
     result = []
