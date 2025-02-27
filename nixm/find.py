@@ -37,12 +37,6 @@ def pidname(name) -> str:
     return p(Workdir.wdr, f"{name}.pid")
 
 
-def skel() -> str:
-    path = pathlib.Path(store())
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
 def store(pth="") -> str:
     return p(Workdir.wdr, "store", pth)
 
@@ -131,7 +125,5 @@ def __dir__():
         'find',
         'last',
         'pidname',
-        'skel',
-        'spl',
         'types'
     )

@@ -63,6 +63,12 @@ def read(obj, pth):
     return pth
 
 
+def skel() -> str:
+    path = pathlib.Path(store())
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
 def write(obj, pth):
     with lock:
         cdir(pth)
@@ -78,5 +84,6 @@ def __dir__():
         'DecodeError',
         'cdir',
         'read',
+        'skel',
         'write'
     )

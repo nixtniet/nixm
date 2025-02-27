@@ -24,8 +24,7 @@ from .table   import Table
 from . import modules as MODS
 
 
-p        = os.path.join
-pname    = "nixm.modules"
+p = os.path.join
 
 
 def nil(txt):
@@ -193,7 +192,7 @@ def background():
     disable()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
-    inits(MODS, Config.init or "irc,rss", pname)
+    inits(MODS, Config.init or "irc,rss")
     forever()
 
 
@@ -239,7 +238,7 @@ def service():
     privileges()
     pidfile(pidname(Config.name))
     Commands.add(cmd)
-    inits(MODS, Config.init or "irc,rss", pname)
+    inits(MODS, Config.init or "irc,rss")
     forever()
 
 
