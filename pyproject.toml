@@ -10,7 +10,7 @@ build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'nixm'
-version = "72"
+version = "73"
 authors = [
     {name = 'Bart Thate', email = 'bthate@dds.nl' },
 ]
@@ -27,7 +27,7 @@ classifiers=[
 
 
 [project.scripts]
-"nixm" = "nixm.run:main"
+"nixm" = "nixm.main:main"
 
 
 [project.urls]

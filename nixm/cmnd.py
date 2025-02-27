@@ -26,7 +26,6 @@ STARTTIME = time.time()
 class Config(Default):
 
     init = ""
-    #name = sys.argv[0].split(os.sep)[-1]
     name = Default.__module__.split(".")[0]
     opts = Default()
 
