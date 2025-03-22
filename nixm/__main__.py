@@ -262,6 +262,7 @@ def srv(event):
 
 
 def tbl(event):
+    import nixm.modules
     for mod in mods():
         scan(mod)
     event.reply("# This file is placed in the Public Domain.")

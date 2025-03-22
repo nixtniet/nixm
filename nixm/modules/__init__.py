@@ -45,7 +45,7 @@ class MD5Error(Exception):
 class Main(Default):
 
     debug   = False
-    ignore  = 'llm,mbx,rst,udp,web,wsd'
+    ignore  = ''
     init    = ""
     md5     = True
     name    = __package__.split(".")[0]
@@ -184,7 +184,7 @@ def check(name, sum=""):
 
 def getmod(name):
     mname = f"{pname}.{name}"
-    pth = os.path.abspath(mname.replace(".", os.sep) + ".py")
+    pth = os.path.join(path, f"{name}.py")
     spec = importlib.util.spec_from_file_location(mname, pth)
     if not spec:
         return None
