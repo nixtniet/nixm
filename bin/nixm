@@ -1,2 +1,2 @@
-python3 -m nixm.main $* ;
+python3 -m nixm $* ;
 
