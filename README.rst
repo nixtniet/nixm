@@ -13,7 +13,7 @@ N I X M
 
 |
 | ``nixm <cmd> [key=val] [key==val]``
-| ``nixm -cviw``
+| ``nixm -cvaw [init=mod1,mod2]``
 | ``nixm -d`` 
 | ``nixm -s``
 |
@@ -25,12 +25,6 @@ N I X M
 perisistence for configuration files, event handler to handle the
 client/server connection, deferred exception handling to not crash
 on an error, etc.
-
-``NIXM`` contains all the python3 code to program objects in a functional
-way. It provides a base Object class that has only dunder methods, all
-methods are factored out into functions with the objects as the first
-argument. It is called Object Programming (OP), OOP without the
-oriented.
 
 ``NIXM`` allows for easy json save//load to/from disk of objects. It
 provides an "clean namespace" Object class that only has dunder
@@ -190,7 +184,7 @@ and add the following for ``hello world``
 save this and recreate the dispatch table
 
 |
-| ``$ nixm tbl > nixm/names.py``
+| ``$ nixm tbl > nixm/modules/tbl.py``
 |
 
 ``nixm`` can execute the ``hello`` command now.
@@ -200,9 +194,10 @@ save this and recreate the dispatch table
 | ``hello world !!``
 |
 
-commands run in their own thread, errors are deferred to not have loops
-blocking/breaking on exception and can contain your own written python3
-code, see the nixm/modules directory for examples.
+
+Commands run in their own thread and the program borks on exit, output gets
+flushed on print so exceptions appear in the systemd logs. Modules can contain
+your own written python3 code, see the nixbot/modules directory for examples.
 
 
 **FILES**

@@ -18,17 +18,15 @@ sys.path.insert(0, os.getcwd())
 
 
 from nixm.client  import Client
-from nixm.error   import Errors
-from nixm.event   import Event
-from nixm.modules import STARTTIME, Main, Commands, command, mods, parse
-from nixm.object  import Object, fmt, keys
-from nixm.reactor import Reactor
-from nixm.thread  import Thread, launch
-from nixm.utils   import elapsed, spl
-from nixm.workdir import Workdir, skel
+from nixm.handler import Event
+from nixm.modules import Main, command, elapsed, modules, parse, settable, spl
+from nixm.object  import Object, keys
+from nixm.store   import Workdir, skel
+from nixm.thread  import STARTTIME, Errors, full, launch
 
 
 Main.debug  = True
+Main.md5    = False
 Workdir.wdr = ".test"
 
 
@@ -49,6 +47,7 @@ param.dis = [""]
 param.dpl = ["hnrss title,url", ""]
 param.flt = [""]
 param.fnd = ["log", "rss", "config", "todo", ""]
+param.man = [""]
 param.mod = [""]
 param.mre = [""]
 param.nme = ["hnrss hackernews", ""]
@@ -93,7 +92,7 @@ class CLI(Client):
 def banner():
     tme = time.ctime(time.time()).replace("  ", " ")
     print(f"{Main.name.upper()} since {tme}")
-    print("loaded " + ",".join(sorted(Commands.names)))
+    print("loaded " + ",".join(sorted(modules())))
 
 
 def consume(evts):
@@ -108,7 +107,7 @@ def consume(evts):
 
 def payload(clt, cmds):
     nmr = 0
-    cmdz = keys(cmds)
+    cmdz = sorted(keys(cmds))
     if "s" in Main.opts:
         rand.shuffle(cmdz)
     for cmd in cmdz:
@@ -138,13 +137,17 @@ def wrap(function):
     finally:
         if old3:
             termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, old3)
+    for exc in Errors.errors:
+        for line in full(exc):
+            print(line.rstrip())
 
 
 def main():
     global nrs
     global nrcommand
+    settable()
     parse(Main, " ".join(sys.argv[1:]))
-    nrcommand = len(Commands.names) or 1
+    nrcommand = 0
     if "v" in Main.opts:
         banner()
     if "f" not in Main.opts:
@@ -158,24 +161,27 @@ def main():
     for _nr in range(nrs):
         thrs.append(launch(payload, clt, pre))
     for thr in thrs:
-       thr.join()
+        nr = thr.join()
+        nrcommand += nr
+    thrs = []
     for _nr in range(nrs):
         thrs.append(launch(payload, clt, param))
     for thr in thrs:
-       thr.join()
+        nr = thr.join()
+        nrcommand += nr
+    thrs = []
     for _nr in range(nrs):
         thrs.append(launch(payload, clt, post))
     for thr in thrs:
-       thr.join()
+        nr = thr.join()
+        nrcommand += nr
     consume(events)
 
 
 if __name__ == "__main__":
     wrap(main)
-    for exc in Errors.errors:
-        print(Errors.format(exc))
     endtime = time.time()
     lap = elapsed(endtime-STARTTIME)
-    percall = (endtime-STARTTIME)/(nrs*nrcommand)
+    percall = (endtime-STARTTIME)/(nrcommand)
     if "v" in Main.opts:
-        print(f"total: {lap} nrs: {nrs} cmds: {nrcommand} call: {percall}")
+        print(f"total: {lap} nrs: {nrs} cmds: {nrcommand} call: %.6fs" % percall)
