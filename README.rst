@@ -202,7 +202,7 @@ save this and recreate the dispatch table
 
 commands run in their own thread, errors are deferred to not have loops
 blocking/breaking on exception and can contain your own written python3
-code, see the nixt/modules directory for examples.
+code, see the nixm/modules directory for examples.
 
 
 **FILES**
