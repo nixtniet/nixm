@@ -4,10 +4,10 @@
 "NIXT"
 
 
-from ..disk   import read,write
-from ..json   import dumps, loads
-from ..object import Object as Object
-from ..object import construct, items, keys, update, values
+from .disk   import read,write
+from .json   import dumps, loads
+from .object import Object as Object
+from .object import construct, items, keys, update, values
 
 
 __all__ = (
